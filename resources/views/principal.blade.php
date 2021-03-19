@@ -11,6 +11,7 @@
     <link rel="shortcut icon" href="img/favicon.png">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Sandìas Què?</title>
+    <link href="css/app.css" rel="stylesheet">
 
 </head>
 
@@ -20,18 +21,18 @@
 
         <div class="app-body">
             <!-- Contenido Principal -->
-            @yield('contenido')
+            <!-- @yield('contenido') -->
             <!-- /Fin del contenido principal -->
         </div>
     </div>
     
 
     <footer class="app-footer">
-        <span>&copy; 2020</span>
+        <span>&copy; 2021</span>
         <span class="ml-auto">Desarrollado por Alex y Brandon</a></span>
     </footer>
     <script src="js/app.js"></script>
-    <script src="js/plantilla.js"></script>
+    <!-- <script src="js/plantilla.js"></script> -->
 </body>
 
 </html>
