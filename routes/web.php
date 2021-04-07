@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('principal');
+    return view('welcome');
 });
 
 //Obtener todas las categorias activas
@@ -31,3 +31,7 @@ Route::post('datos_interesantes', 'DatoController@store');
 Route::put('datos_interesantes/rechazar', 'DatoController@updateRechazar');
 //Aceptar un dato interesante
 Route::put('datos_interesantes/aceptar', 'DatoController@updateRechazar');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
