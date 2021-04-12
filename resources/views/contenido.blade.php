@@ -1,6 +1,6 @@
-@extends('layouts.app')
-
-@section('content')
+<!-- @extends('principal') -->
+@extends('app')
+@section('contenido')
     @if(Auth::check())
         @if(Auth::user()->name === 'admin')
             <template v-if="menu == 0">
@@ -16,4 +16,3 @@
         @endif
     @endif
 @endsection
-

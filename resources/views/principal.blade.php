@@ -17,11 +17,26 @@
 
 <body class="app header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
     <div id="app">
-        @include('header')
+        @if(Auth::check())
+            @if(Auth::user()->name === 'admin')
+                @include('header_admin')
+            @else
+                @include('header_usuario')
+            @endif
+        @endif
+
+        <div class="card-body">
+            @if (session('status'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('status') }}
+                </div>
+            @endif
+            {{ __('You are logged in!') }}
+        </div>
 
         <div class="app-body">
             <!-- Contenido Principal -->
-            <!-- @yield('contenido') -->
+            @yield('contenido')
             <!-- /Fin del contenido principal -->
         </div>
     </div>
