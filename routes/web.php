@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\DatoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,20 +19,20 @@ Route::get('/', function () {
     return view('home');
 });
 
-//Obtener todas las categorias activas
-Route::get('categorias', 'CategoriaController@index');
+//Obtener todas las categorias
+Route::get('categorias', [CategoriaController::class, 'index']);
 //Almacenar una categoria
-Route::post('categorias', 'CategoriaController@store');
+Route::post('categorias/save', [CategoriaController::class, 'store']);
 //Eliminar una categoria
-Route::delete('categorias', 'CategoriaController@destroy');
+Route::delete('categorias/delete', [CategoriaController::class, 'destroy']);
 //Obtener datos interesantes dependiendo de la categoria seleccionada
-Route::get('datos_interesantes', 'DatoController@index');
+Route::get('datos_interesantes', [DatoController::class, 'index']);
 //Almacenar un dato interesante
-Route::post('datos_interesantes', 'DatoController@store');
+Route::post('datos_interesantes/store', [DatoController::class, 'store']);
 //Rechazar un dato interesante
-Route::put('datos_interesantes/rechazar', 'DatoController@updateRechazar');
+Route::put('datos_interesantes/rechazar', [DatoController::class, 'updateRechazar']);
 //Aceptar un dato interesante
-Route::put('datos_interesantes/aceptar', 'DatoController@updateRechazar');
+Route::put('datos_interesantes/aceptar', [DatoController::class, 'updateAceptar']);
 
 Auth::routes();
 

@@ -19,7 +19,7 @@ class DatoController extends Controller
         ->select('datos.titulo', 'datos.contenido', 'datos.url_mas_info', 'datos.url_imagen', 'cat.nombre as categoria')
         ->where('cat.nombre', $request->categoria)
         ->where('datos.estado', 1)
-        ->orderBy('datos.id')->paginate(10);
+        ->orderBy('datos.categoria_key')->paginate(10);
         return [
             'pagination' => [
                 'total' => $datos->total(),
