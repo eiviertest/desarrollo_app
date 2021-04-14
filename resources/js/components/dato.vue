@@ -1,11 +1,13 @@
 <template>
     <main class="main">
-        <div class="card" style="width: 18rem;">
-            <img src="src" v-html="scr" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title" v-text="titulo"></h5>
-                <p class="card-text" v-text="contenido">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                <a href="#" v-html="href" class="btn btn-primary" v-bind="link">Conocer màs</a>
+        <div class="container-fluid">
+            <div class="card">
+                <img v-bind:src="scr" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title" v-text="titulo"></h5>
+                    <p class="card-text" v-text="contenido"></p>
+                    <a v-bind:href="href" class="btn btn-primary">Conocer más</a>
+                </div>
             </div>
         </div>
     </main>
