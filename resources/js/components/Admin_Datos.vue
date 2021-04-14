@@ -4,9 +4,24 @@
             <!-- Tabla Listado -->
             <div class="card">
                 <div class="card-header">
-                    <select class="form-control col-md-3" v-model="criterio">
-                        <option v-for="categoria in arrayCategorias" :value="categoria.id" v-text="categoria.nombre" v-bind:key="categoria.id"></option>
-                    </select>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <label for="categoria">Categoría</label>
+                            <select class="form-control col-md-3" v-model="categoria_id" @change="getDatos(1, categoria_id, estado)">
+                                <option value="0">Seleccionar categoría</option>
+                                <option v-for="categoria in arrayCategorias" :value="categoria.id" v-text="categoria.nombre" v-bind:key="categoria.id"></option>
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="estado">Estado</label>
+                            <select class="form-control col-md-3" v-model="estado" @change="getDatos(1, categoria_id, estado)">
+                                <option value="-1">Seleccionar estado</option>
+                                <option value="0">Rechazado</option>
+                                <option value="1">Aceptado</option>
+                                <option value="2">En proceso</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered table-striped table-sm">
@@ -16,16 +31,48 @@
                                 <th>Contenido</th>
                                 <th>Categoria</th>
                                 <th>Más info</th>
+                                <th>Estado</th>
                                 <th>Acción</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="categoria in arrayCategorias" :key="categoria.id">
-                                <td v-text="categoria.nombre"></td>
+                            <tr v-for="dato in arrayDatos" :key="dato.id">
+                                <td v-text="dato.titulo"></td>
+                                <td v-text="dato.contenido"></td>
+                                <td v-text="dato.categoria"></td>
                                 <td>
-                                    <button type="button" class="btn btn-danger btn-sm" @click="deleteCategoria(categoria.id)">
-                                        <i class="fa fa-trash"></i>
-                                    </button>
+                                    <a :href="dato.url_mas_info" v-text="dato.url_mas_info"></a>
+                                </td>
+                                <td>
+                                    <div v-if="dato.estado === 0">
+                                        <span class="badge badge-danger">Rechazado</span>
+                                    </div>
+                                    <div v-if="dato.estado === 1">
+                                        <span class="badge badge-success">Aceptado</span>
+                                    </div>
+                                    <div v-if="dato.estado === 2">
+                                        <span class="badge badge-warning">En proceso</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <template v-if="dato.estado === 0">
+                                        <button type="button" class="btn btn-success btn-sm" @click="aceptarDato(dato.id)">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                    </template>
+                                    <template v-if="dato.estado === 1">
+                                        <button type="button" class="btn btn-danger btn-sm" @click="rechazarDato(dato.id)">
+                                            <i class="fa fa-close"></i>
+                                        </button>
+                                    </template>
+                                    <template v-if="dato.estado === 2">
+                                        <button type="button" class="btn btn-danger btn-sm" @click="rechazarDato(dato.id)">
+                                            <i class="fa fa-close"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-success btn-sm" @click="aceptarDato(dato.id)">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                    </template>
                                 </td>
                             </tr>
                         </tbody>
@@ -47,36 +94,6 @@
             </div>
             <!-- ./Tabla Listado -->
         </div>
-        <!--Inicio del modal agregar/actualizar-->
-        <div class="modal fade" tabindex="-1" :class="{'mostrar' : modal}" role="dialog" aria-labelledby="myModalLabel" style="display: none;" aria-hidden="true">
-            <div class="modal-dialog modal-primary modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Agregar categoría</h4>
-                        <button type="button" class="close" @click="cerrarModal()" aria-label="Close">
-                            <span aria-hidden="true">X</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
-                            <div class="form-group row">
-                                <label class="col-md-3 form-control-label" for="text-input">Nombre</label>
-                                <div class="col-md-9">
-                                    <input v-model="nombre" type="text" class="form-control" placeholder="Nombre de categoría">
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" @click="cerrarModal()">Cerrar</button>
-                        <button type="button" class="btn btn-primary" @click="saveCategoria()">Guardar</button>
-                    </div>
-                </div>
-                <!-- /.modal-content -->
-            </div>
-            <!-- /.modal-dialog -->
-        </div>
-        <!--Fin del modal-->
     </main>
 </template>
 <script>
@@ -94,9 +111,12 @@ export default {
             },
             offset: 2,
             arrayCategorias: [],
+            arrayDatos: [],
             arrayErrores: [],
             modal: 0,
-            nombre: ""
+            nombre: "",
+            categoria_id: 0,
+            estado: -1
         }
     },
     computed: {
@@ -124,9 +144,9 @@ export default {
         }
     },
     methods: {
-        deleteCategoria(id){
+        aceptarDato(id){
             Swal.fire({
-            title: '¿Desea eliminar la categoría?',
+            title: '¿Desea aceptar el dato?',
             showDenyButton: true,
             showCancelButton: false,
             confirmButtonText: `Si`,
@@ -134,70 +154,69 @@ export default {
             }).then((result) => {
             /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-                axios.delete('categorias/delete', {params: {id:  id} }).then((response) => {
-                    Swal.fire('Categoría eliminada!', '', 'success');
-                    this.getCategorias(1);
+                axios.put('datos_interesantes/aceptar', {id:  id}).then((response) => {
+                    Swal.fire('Dato aceptado!', '', 'success');
+                    this.getDatos(1, 0, -1);
                 }).catch(function (error) {
-                    Swal.fire('Error al eliminar', '', 'info');
+                    Swal.fire('Error al aceptar el dato', '', 'info');
                 })
             } else if (result.isDenied) {
                 Swal.fire('Operación cancelada', '', 'info');
             }
             })
         },
-        cerrarModal(){
-            this.modal = 0;
-            this.nombre = '';
+        rechazarDato(id){
+            Swal.fire({
+            title: '¿Desea rechazar el dato?',
+            showDenyButton: true,
+            showCancelButton: false,
+            confirmButtonText: `Si`,
+            denyButtonText: `No`,
+            }).then((result) => {
+            /* Read more about isConfirmed, isDenied below */
+            if (result.isConfirmed) {
+                axios.put('datos_interesantes/rechazar', {id:  id}).then((response) => {
+                    Swal.fire('Dato rechazado!', '', 'success');
+                    this.getDatos(1, 0, -1);
+                }).catch(function (error) {
+                    Swal.fire('Error al rechar el dato', '', 'info');
+                })
+            } else if (result.isDenied) {
+                Swal.fire('Operación cancelada', '', 'info');
+            }
+            })
         },
-        saveCategoria(){
+        getDatos(page, categoria, estado){
             let me = this;
-            axios.post('/categorias/save', {
-                'nombre' : this.nombre
-            }).then(function (response){
-                me.cerrarModal();
-                me.getCategorias(1);
+            let url = '/datos_interesantes?page=' + page;
+            axios.get(url, {params: { categoria : categoria, estado : estado}}).then(function (response) {
+                me.arrayDatos = response.data.datos.data;
+                me.pagination = response.data.pagination;
             }).catch(function (error) {
                 me.arrayErrores = error.data;
             });
         },
-        abrirModal(){
-            this.modal = 1;
-            this.nombre = "";
-            console.log("Abrir modal");
-        },
-        getCategorias(page){
+        getCategorias(){
             let me = this;
-            let url = '/categorias?page=' + page;
+            let url = '/categorias';
             axios.get(url).then(function (response) {
                 me.arrayCategorias = response.data.categorias.data;
-                me.pagination = response.data.pagination;
             }).catch(function (error) {
-                console.log(error);
                 me.arrayErrores = error.data;
             });
         },
         cambiarPagina(page){
             this.pagination.current_page = page;
-            this.getCategorias(page);
+            this.getDatos(page, 0, -1);
         },
     },
     mounted(){
-        this.getCategorias(1);
+        this.getDatos(1, 0, -1);
+        this.getCategorias();
     }
 }
 </script>
 <style>
-    .modal-content{
-        margin: 5% !important;
-        width: 100% !important;
-        position: absolute !important;
-    }
-    .mostrar{
-        display: list-item !important;
-        opacity: 1 !important;
-        position: absolute !important;
-        background-color: #3c29297a !important;
-    }
     .div-error{
         display: flex;
         justify-content: center;

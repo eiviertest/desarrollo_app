@@ -43,7 +43,10 @@
                                 </li>
                             @else
                                 <li class="nav-item">
-                                    <a @click="menu=0" class="nav-link" href="#">Enviar dato interesante</a>
+                                    <a @click="menu=0" class="nav-link" href="#">Datos interesantes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a @click="menu=1" class="nav-link" href="#">Enviar dato interesante</a>
                                 </li>
                             @endif
                         @endif

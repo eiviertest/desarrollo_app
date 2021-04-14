@@ -169,7 +169,6 @@ export default {
                 me.arrayCategorias = response.data.categorias.data;
                 me.pagination = response.data.pagination;
             }).catch(function (error) {
-                console.log(error);
                 me.arrayErrores = error.data;
             });
         },

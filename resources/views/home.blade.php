@@ -13,6 +13,9 @@
             <template v-if="menu == 0">
                 <datos></datos>
             </template>
+            <template v-if="menu == 1">
+                <enviar_dato></enviar_dato>
+            </template>
         @endif
     @endif
 @endsection

@@ -22,6 +22,7 @@ window.Vue = require('vue').default;
 Vue.component('admin_datos', require('./components/Admin_Datos.vue').default);
 Vue.component('admin_categoria', require('./components/Admin_Categorias.vue').default);
 Vue.component('datos', require('./components/Datos.vue').default);
+Vue.component('enviar_dato', require('./components/Enviar_Dato.vue').default);
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
 
 /**

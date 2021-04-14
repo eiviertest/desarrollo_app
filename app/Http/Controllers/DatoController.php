@@ -15,10 +15,10 @@ class DatoController extends Controller
     public function index(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
-        $datos = Dato::join('categoria as cat', 'datos.categoria_key', 'cat.id')
-        ->select('datos.titulo', 'datos.contenido', 'datos.url_mas_info', 'datos.url_imagen', 'cat.nombre as categoria')
-        ->where('cat.nombre', $request->categoria)
-        ->where('datos.estado', 1)
+        $datos = Dato::join('categorias as cat', 'datos.categoria_key', 'cat.id')
+        ->select('datos.id', 'datos.estado', 'datos.titulo', 'datos.contenido', 'datos.url_mas_info', 'datos.url_imagen', 'cat.nombre as categoria')
+        ->categoria($request->categoria)
+        ->estado($request->estado)
         ->orderBy('datos.categoria_key')->paginate(10);
         return [
             'pagination' => [
@@ -42,14 +42,16 @@ class DatoController extends Controller
     public function store(Request $request)
     {
         if(!$request->ajax()) return redirect('/');
+        // dd($request->dato['titulo']);
         $dato = new Dato();
-        $dato->titulo = $request->titulo;
-        $dato->contenido = $request->contenido;
-        $dato->url_mas_info = $request->url_mas_info;
-        $dato->url_imagen = $request->url_imagen;
-        $dato->categoria_key = $request->categoria_key;
+        $dato->titulo = $request->dato['titulo'];
+        $dato->contenido = $request->dato['contenido'];
+        $dato->url_mas_info = $request->dato['url_mas_info'];
+        $dato->url_imagen = $request->dato['url_imagen'];
+        $dato->categoria_key = $request->dato['categoria_key'];
         $dato->estado = 2;
         $dato->save();
+        return;
     }
 
     /**
