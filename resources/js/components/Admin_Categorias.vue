@@ -148,7 +148,7 @@ export default {
         },
         saveCategoria(){
             let me = this;
-            axios.post('/categorias/save', {
+            axios.post('categorias/save', {
                 'nombre' : this.nombre
             }).then(function (response){
                 me.cerrarModal();
@@ -164,7 +164,7 @@ export default {
         },
         getCategorias(page){
             let me = this;
-            let url = '/categorias?page=' + page;
+            let url = 'categorias?page=' + page;
             axios.get(url).then(function (response) {
                 me.arrayCategorias = response.data.categorias.data;
                 me.pagination = response.data.pagination;

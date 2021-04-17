@@ -2010,7 +2010,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     saveCategoria: function saveCategoria() {
       var me = this;
-      axios.post('/categorias/save', {
+      axios.post('categorias/save', {
         'nombre': this.nombre
       }).then(function (response) {
         me.cerrarModal();
@@ -2026,7 +2026,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     getCategorias: function getCategorias(page) {
       var me = this;
-      var url = '/categorias?page=' + page;
+      var url = 'categorias?page=' + page;
       axios.get(url).then(function (response) {
         me.arrayCategorias = response.data.categorias.data;
         me.pagination = response.data.pagination;
@@ -2265,7 +2265,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     getDatos: function getDatos(page, categoria, estado) {
       var me = this;
-      var url = '/datos_interesantes?page=' + page;
+      var url = 'datos_interesantes?page=' + page;
       axios.get(url, {
         params: {
           categoria: categoria,
@@ -2280,7 +2280,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     getCategorias: function getCategorias() {
       var me = this;
-      var url = '/categorias';
+      var url = 'categorias';
       axios.get(url).then(function (response) {
         me.arrayCategorias = response.data.categorias.data;
       })["catch"](function (error) {
@@ -2382,7 +2382,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getDatos: function getDatos(page, categoria, estado) {
       var me = this;
-      var url = '/datos_interesantes?page=' + page;
+      var url = 'datos_interesantes?page=' + page;
       axios.get(url, {
         params: {
           categoria: categoria,
@@ -2468,7 +2468,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   methods: {
     getCategorias: function getCategorias() {
       var me = this;
-      var url = '/categorias';
+      var url = 'categorias';
       axios.get(url).then(function (response) {
         me.arrayCategorias = response.data.categorias.data;
       })["catch"](function (error) {
@@ -2487,7 +2487,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     enviarDato: function enviarDato() {
       var me = this;
-      axios.post('/datos_interesantes/store', {
+      axios.post('datos_interesantes/store', {
         'dato': me.dato
       }).then(function (response) {
         me.resetVariables();

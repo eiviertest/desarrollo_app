@@ -49,7 +49,7 @@ export default {
     methods: {
         getCategorias(){
             let me = this;
-            let url = '/categorias';
+            let url = 'categorias';
             axios.get(url).then(function (response) {
                 me.arrayCategorias = response.data.categorias.data;
             }).catch(function (error) {
@@ -68,7 +68,7 @@ export default {
         },
         enviarDato(){
             let me = this;
-            axios.post('/datos_interesantes/store',{
+            axios.post('datos_interesantes/store',{
                 'dato': me.dato
             }).then(function (response) {
                 me.resetVariables();

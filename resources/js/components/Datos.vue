@@ -60,7 +60,7 @@ export default {
     methods: {
         getDatos(page, categoria, estado){
             let me = this;
-            let url = '/datos_interesantes?page=' + page;
+            let url = 'datos_interesantes?page=' + page;
             axios.get(url, {params: { categoria : categoria, estado : estado}}).then(function (response) {
                 me.arrayDatos = response.data.datos.data;
                 me.pagination = response.data.pagination;
